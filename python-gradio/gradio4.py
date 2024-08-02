@@ -1,18 +1,18 @@
 import gradio as gr
 
-with gr.Blocks() as demo:
+with gr.Blocks(css="style.css") as demo:
     with gr.Tab(label="txt.img"):
         with gr.Row():
             with gr.Column(scale=15):
                 txt1 = gr.Textbox(lines=2, label="")
                 txt2 = gr.Textbox(lines=2, label="")
             with gr.Column(scale=1, min_width=1):
-                button1 = gr.Button(value="1")
-                button2 = gr.Button(value="2")
-                button3 = gr.Button(value="3")
-                button4 = gr.Button(value="4")
+                button1 = gr.Button(value="1",elem_classes="gr-button")
+                button2 = gr.Button(value="2",elem_classes="gr-button")
+                button3 = gr.Button(value="3",elem_classes="gr-button")
+                button4 = gr.Button(value="4",elem_classes="gr-button")
             with gr.Column(scale=6):
-                generate_button = gr.Button(value="Generate", variant="primary", scale=1)
+                generate_button = gr.Button(value="Generate", variant="primary", scale=1,elem_classes="gr-button-primary")
                 with gr.Row():
                     dropdown1 = gr.Dropdown(["1", "2", "3", "4"], label="Style1")
                     dropdown2 = gr.Dropdown(["1", "2", "3", "4"], label="Style2")
@@ -50,4 +50,6 @@ with gr.Blocks() as demo:
                     button12 = gr.Button(value="Send to extras", min_width=1)
 
                 txt3 = gr.Textbox(lines=4, label="")
+    with gr.Tab(label="the next"):
+        pass
 demo.launch()

@@ -1,0 +1,60 @@
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+.gr-tab {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.gr-row {
+    margin-bottom: 10px;
+}
+
+.gr-button-primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.gr-button {
+    border-radius: 4px;
+    padding: 10px 20px;
+    margin: 5px;
+    transition: background-color 0.3s;
+    color: #3528ff;
+}
+
+.gr-button:hover {
+    background-color: #45a049;
+}
+
+.gr-textbox {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.gr-dropdown {
+    margin-bottom: 10px;
+}
+
+.gr-slider {
+    margin-bottom: 10px;
+}
+
+.gr-checkbox-group {
+    margin-bottom: 10px;
+}
+
+.gr-gallery img {
+    border-radius: 4px;
+}
+
+.gr-number {
+    width: 100%;
+}
+
+.gr-checkbox {
+    margin-top: 10px;
+}
