@@ -55,7 +55,8 @@ def assemble_ws_auth_url(requset_url, method="POST", api_key="", api_secret=""):
     signature_sha = hmac.new(api_secret.encode('utf-8'), signature_origin.encode('utf-8'),
                              digestmod=hashlib.sha256).digest()
     signature_sha = base64.b64encode(signature_sha).decode(encoding='utf-8')
-    authorization_origin = f"api_key=\"{api_key}\", algorithm=\"hmac-sha256\", headers=\"host date request-line\", signature=\"{signature_sha}\""
+    authorization_origin = (f"api_key=\"{api_key}\", algorithm=\"hmac-sha256\", headers=\"host date request-line\", "
+                            f"signature=\"{signature_sha}\"")
     authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode(encoding='utf-8')
     values = {
         "host": host,
@@ -107,22 +108,37 @@ def ocr_image(image):
     response = requests.post(request_url, data=json.dumps(body), headers=headers)
 
     if response.status_code != 200:
-        return f"请求失败: {response.status_code}, {response.text}"
+        return ""
 
     tempResult = json.loads(response.content.decode())
 
     if 'payload' in tempResult and 'result' in tempResult['payload']:
-        text = base64.b64decode(tempResult['payload']['result']['text']).decode().replace(" ", "").replace("\n",
-                                                                                                           "").replace(
-            "\t", "").strip()
-        return text
+        text = base64.b64decode(tempResult['payload']['result']['text']).decode()
+        text_json = json.loads(text)
+
+        words = []
+        for page in text_json.get('pages', []):
+            for line in page.get('lines', []):
+                for word in line.get('words', []):
+                    words.append(word.get('content', ' '))
+
+        return ' '.join(words)
     else:
-        return f"OCR 识别失败: {tempResult}"
+        return ""
 
 
-# 创建Gradio接口
-interface = gr.Interface(fn=ocr_image, inputs=gr.Image(type="pil"), outputs="text", title="图片文字识别",
-                         description="上传图片并提取图片中的文字")
+# 创建Gradio Blocks界面
+with gr.Blocks() as demo:
+    gr.Markdown("# 智能阅卷系统\n上传试卷并提取文字")
 
-# 启动接口
-interface.launch()
+    with gr.Row():
+        with gr.Column():
+            img_input = gr.Image(type="pil", label="上传试卷图片")
+            ocr_button = gr.Button(value="开始识别", variant="primary")
+        with gr.Column():
+            ocr_output = gr.Textbox(label="识别结果", lines=10, placeholder="此处为识别结果")
+
+    ocr_button.click(fn=ocr_image, inputs=img_input, outputs=ocr_output)
+
+# 启动界面
+demo.launch()
